@@ -772,7 +772,7 @@ local function scanAndClick()
 					task.wait(0.1) 
 					if giftBtnClass then
 						if clickButton(giftBtnClass, "other") then
-							task.wait(0.1) 
+							task.wait(0.3) 
 							while true do
 								if not scriptActive then break end
 								local finalBtn = findButton(finalButtonText, false)
