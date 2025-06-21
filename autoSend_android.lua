@@ -496,9 +496,14 @@ end
 
 -- Функция для нажатия клавиши E
 local function pressE()
-	VIM:SendKeyEvent(true, Enum.KeyCode.E, false, game)
-	task.wait(1)
-	VIM:SendKeyEvent(false, Enum.KeyCode.E, false, game)
+	local part = game.Workspace.ButtonPart -- часть с ClickDetector
+	local clickDetector = part:FindFirstChildOfClass("ClickDetector")
+	
+	if clickDetector then
+	    clickDetector:Click() -- Эмулирует клик игрока
+	    -- или
+	    clickDetector.MouseClick:Fire() -- Запускает событие вручную
+	end
 	print("Нажата клавиша E")
 end
 
@@ -523,7 +528,7 @@ local function clickButton(button, status)
 			task.wait(0.15)
 			VIM:SendMouseButtonEvent(center.X, center.Y, 0, false, game, 1)
 		elseif status == "exit" then
-			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y)
+			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y)
 		else -- Если status не "exit" и не "name"
 			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y/1.7)
 		end
