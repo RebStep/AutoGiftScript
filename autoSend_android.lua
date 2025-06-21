@@ -80,7 +80,7 @@ frame.Draggable = true
 
 -- Заголовок
 local title = Instance.new("TextLabel", frame)
-title.Text = "Auto Gift Class/Train"
+title.Text = "Auto Gift Class/ Train"
 title.Size = UDim2.new(1, 0, 0, 15)
 title.TextColor3 = Color3.new(1,1,1)
 title.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -502,62 +502,50 @@ local function pressE()
 	print("Нажата клавиша E")
 end
 
-local function clickButton(button, status, maxAttempts)
-    maxAttempts = maxAttempts or 3 -- Количество попыток по умолчанию
-    local attempts = 0
-    
-    while attempts < maxAttempts do
-        local success, err = pcall(function()
-            if not button or not button:IsDescendantOf(game) or not button.AbsolutePosition then 
-                error("Кнопка не найдена или уничтожена")
-            end
+-- Улучшенная функция клика
+local function clickButton(button, status)
+	local success, err = pcall(function()
+		if not button or not button.AbsolutePosition then return false end
 
-            -- Перемещаем кнопку к центру (если нужно)
-            moveButtonToCenter(button)
-            task.wait(0.2) -- Увеличиваем задержку для анимации
+		-- Перемещаем кнопку к центру, если включено
+		moveButtonToCenter(button)
+		task.wait(0.1) -- Даем время на анимацию
+		local absPos = button.AbsolutePosition
+		local absSize = button.AbsoluteSize
+		local center = nil -- Инициализируем center как nil
 
-            -- Рассчитываем позицию клика
-            local absPos = button.AbsolutePosition
-            local absSize = button.AbsoluteSize
-            local center
-            
-            if status == "name" then
-                center = Vector2.new(absPos.X + absSize.X/2, absPos.Y + absSize.Y + absSize.Y + absSize.Y)
-            elseif status == "exit" then
-                center = Vector2.new(absPos.X + absSize.X/2, absPos.Y + absSize.Y + absSize.Y)
-            else
-                center = Vector2.new(absPos.X + absSize.X/2, absPos.Y + absSize.Y + absSize.Y + absSize.Y/1.55)
-            end
+		if status == "name" then
+			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y)
+		elseif status == "exit" then
+			center = Vector2.new(absPos.X + absSize.X, absPos.Y)
+		else -- Если status не "exit" и не "name"
+			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y/1.5)
+		end
 
-            -- Плавное движение курсора
-            for i = 1, 5 do
-                VIM:SendMouseMoveEvent(
-                    center.X + math.random(-5, 5), 
-                    center.Y + math.random(-5, 5), 
-                    game
-                )
-                task.wait(0.05)
-            end
+		local success, result = pcall(function()
+			-- Добавляем движение курсора для большей надежности
+			VIM:SendMouseMoveEvent(center.X, center.Y, game)
+			task.wait(0.1)
 
-            -- Клик с небольшой случайной задержкой
-            VIM:SendMouseButtonEvent(center.X, center.Y, 0, true, game, 1)
-            task.wait(0.1 + math.random()*0.1)
-            VIM:SendMouseButtonEvent(center.X, center.Y, 0, false, game, 1)
-            
-            return true
-        end)
+			VIM:SendMouseButtonEvent(center.X, center.Y, 0, true, game, 1)
+			task.wait(0.15)
+			VIM:SendMouseButtonEvent(center.X, center.Y, 0, false, game, 1)
+		end)
 
-        if success then
-            return true
-        else
-            print("Попытка "..tostring(attempts+1).." не удалась: "..tostring(err))
-            attempts = attempts + 1
-            task.wait(0.5) -- Увеличиваем задержку между попытками
-        end
-    end
-    
-    print("Не удалось кликнуть по кнопке после "..maxAttempts.." попыток")
-    return false
+		if not success then
+			clickButton(button, status)
+			print("Ошибка:", result)  -- Обработка ошибки
+		end
+
+
+		return true
+	end)
+
+	if not success then
+		print("Ошибка при клике: "..tostring(err), true)
+		return false
+	end
+	return success
 end
 
 -- Улучшенный поиск кнопок во всех возможных местах
