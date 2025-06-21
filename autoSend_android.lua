@@ -515,7 +515,7 @@ local function clickButton(button, status)
 		local center = nil -- Инициализируем center как nil
 
 		if status == "name" then
-			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y)
+			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y)
 		elseif status == "exit" then
 			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y)
 		else -- Если status не "exit" и не "name"
