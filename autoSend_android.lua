@@ -515,7 +515,13 @@ local function clickButton(button, status)
 		local center = nil -- Инициализируем center как nil
 
 		if status == "name" then
-			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y)
+			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y + absSize.Y + absSize.Y/1.7)
+			VIM:SendMouseMoveEvent(center.X, center.Y, game)
+			task.wait(0.1)
+
+			VIM:SendMouseButtonEvent(center.X, center.Y, 0, true, game, 1)
+			task.wait(0.15)
+			VIM:SendMouseButtonEvent(center.X, center.Y, 0, false, game, 1)
 		elseif status == "exit" then
 			center = Vector2.new(absPos.X + absSize.X, absPos.Y + absSize.Y + absSize.Y)
 		else -- Если status не "exit" и не "name"
