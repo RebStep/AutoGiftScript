@@ -526,7 +526,7 @@ local function clickButton(button, status, maxAttempts)
             elseif status == "exit" then
                 center = Vector2.new(absPos.X + absSize.X/2, absPos.Y + absSize.Y + absSize.Y)
             else
-                center = Vector2.new(absPos.X + absSize.X/2, absPos.Y + absSize.Y + absSize.Y/1.55)
+                center = Vector2.new(absPos.X + absSize.X/2, absPos.Y + absSize.Y + absSize.Y + absSize.Y/1.55)
             end
 
             -- Плавное движение курсора
