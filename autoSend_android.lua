@@ -496,13 +496,15 @@ end
 
 -- Функция для нажатия клавиши E
 local function pressE()
-	local part = game.Workspace.ButtonPart -- часть с ClickDetector
-	local clickDetector = part:FindFirstChildOfClass("ClickDetector")
+	local player = game:GetService("Players").LocalPlayer
+	local gui = player:WaitForChild("PlayerGui")
+	local promptGui = gui:FindFirstChild("ProximityPrompts") -- или другой путь
 	
-	if clickDetector then
-	    clickDetector:Click() -- Эмулирует клик игрока
-	    -- или
-	    clickDetector.MouseClick:Fire() -- Запускает событие вручную
+	if promptGui then
+	    local prompt = promptGui:FindFirstChildOfClass("ProximityPrompt")
+	    if prompt then
+	        prompt.Triggered:Fire() -- активируем
+	    end
 	end
 	print("Нажата клавиша E")
 end
